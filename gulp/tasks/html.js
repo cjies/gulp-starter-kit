@@ -6,7 +6,7 @@ var browserSync    = require('browser-sync');
 var changed        = require('gulp-changed');
 var gulpif         = require('gulp-if');
 var plumber        = require('gulp-plumber');
-var minifyHTML     = require('gulp-minify-html');
+var htmlmin        = require('gulp-htmlmin');
 var handleErrors   = require('../util/handleErrors');
 
 gulp.task('html', function() {
@@ -18,11 +18,7 @@ gulp.task('html', function() {
     }}))
     .pipe(gulpif(
       global.isProd, 
-      minifyHTML({
-        empty: true,
-        conditionals: true,
-        spare: true
-      })
+      htmlmin(config.html.htmlmin)
     ))
     .pipe(gulp.dest(config.html.dest))
     .pipe(gulpif(

@@ -25,6 +25,7 @@ module.exports = {
         browsers: ['last 2 versions'],
         cascade: false
       },
+      cssnano: false,
       dest: 'www/css'
     },
 
@@ -36,6 +37,7 @@ module.exports = {
         browsers: ['last 2 versions'],
         cascade: false
       },
+      cssnano: false,
       dest: 'www/css'
     },
 
@@ -44,6 +46,7 @@ module.exports = {
       src: ['src/**/*.css'],
       sourcemap: true,
       autoprefixer: false,
+      cssnano: false,
       dest: 'www/css'
     },
 
@@ -67,7 +70,11 @@ module.exports = {
     // HTML Templates
     html: {
       src: ['src/**/*.html'],
-      dest: 'www/'
+      dest: 'www/',
+      htmlmin: {
+        removeComments: true,
+        collapseWhitespace: true
+      }
     },
 
     // Jade Templates
@@ -107,11 +114,8 @@ module.exports = {
   //   Tests
   // -------------------------------------
 
-    test: {
-      karma: {
-        config: 'tests/karma.conf.js',
-        src: './thisdoesntexist'
-      }
+    'test': {
+      'karma': 'tests/karma.config.js'
     },
 
 

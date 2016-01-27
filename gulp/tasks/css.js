@@ -6,8 +6,9 @@ var gulpif       = require('gulp-if');
 var gutil        = require('gulp-util');
 var plumber      = require('gulp-plumber');
 var sourcemaps   = require('gulp-sourcemaps');
-var autoprefixer = require('gulp-autoprefixer');
-var minifyCss    = require('gulp-minify-css');
+var postcss      = require('gulp-postcss');
+var autoprefixer = require('autoprefixer');
+var cssnano      = require('cssnano');
 var header       = require('gulp-header');
 var handleErrors = require('../util/handleErrors');
 var browserSync  = require('browser-sync');
@@ -25,11 +26,13 @@ gulp.task('css', function () {
       this.emit('end');
     }}))
     .pipe(gulpif(createSourceMap, sourcemaps.init()))
-    .pipe(gulpif(
-      config.css.autoprefixer,
+    .pipe(postcss([ 
       autoprefixer(config.css.autoprefixer)
+    ]))
+    .pipe(gulpif(
+      global.isProd, 
+      postcss([ cssnano(config.css.cssnano) ]) 
     ))
-    .pipe(gulpif(global.isProd, minifyCss()))
     .pipe(gulpif(
       createSourceMap, 
       sourcemaps.write(createSourceMap ? '.' : null)

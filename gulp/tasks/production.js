@@ -4,7 +4,7 @@ var config      = require('../config');
 var gulp        = require('gulp');
 var runSequence = require('run-sequence');
 
-gulp.task('prod', [], function(cb) {
+gulp.task('prod', ['clean'], function(cb) {
 
   cb = cb || function() {};
 

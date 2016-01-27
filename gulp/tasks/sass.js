@@ -6,14 +6,14 @@ var gulpif       = require('gulp-if');
 var gutil        = require('gulp-util');
 var plumber      = require('gulp-plumber');
 var sass         = require('gulp-sass');
+var postcss      = require('gulp-postcss');
+var autoprefixer = require('autoprefixer');
+var cssnano      = require('cssnano');
 var sourcemaps   = require('gulp-sourcemaps');
-var autoprefixer = require('gulp-autoprefixer');
-var minifyCss    = require('gulp-minify-css');
 var header       = require('gulp-header');
 var handleErrors = require('../util/handleErrors');
 var browserSync  = require('browser-sync');
 
-var compassMixins = 'node_modules/compass-mixins/lib/';
 var pkg          = require('../../package.json');
 
 gulp.task('sass', function () {
@@ -27,14 +27,14 @@ gulp.task('sass', function () {
       this.emit('end');
     }}))
     .pipe(gulpif(createSourceMap, sourcemaps.init()))
-    .pipe(sass({
-      includePaths: [compassMixins]
-    }))
-    .pipe(gulpif(
-      config.sass.autoprefixer, 
+    .pipe(sass())
+    .pipe(postcss([ 
       autoprefixer(config.sass.autoprefixer)
+    ]))
+    .pipe(gulpif(
+      global.isProd, 
+      postcss([ cssnano(config.sass.cssnano) ]) 
     ))
-    .pipe(gulpif(global.isProd, minifyCss()))
     .pipe(gulpif(
       createSourceMap, 
       sourcemaps.write(createSourceMap ? '.' : null)

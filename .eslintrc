@@ -1,10 +1,8 @@
 {
-    "extends": "airbnb",
+    "extends": "airbnb/legacy",
     "env": {
         "browser": true,
-        "node": true,
-        "mocha": true
+        "jquery": true
     },
-    "ecmaFeatures": {},
     "rules": {}
 }

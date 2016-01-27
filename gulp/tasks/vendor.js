@@ -7,7 +7,8 @@ var plumber      = require('gulp-plumber');
 var concat       = require('gulp-concat');
 var uglify       = require('gulp-uglify');
 var sourcemaps   = require('gulp-sourcemaps');
-var minifyCss    = require('gulp-minify-css');
+var postcss      = require('gulp-postcss');
+var cssnano      = require('cssnano');
 var header       = require('gulp-header');
 var handleErrors = require('../util/handleErrors');
 var browserSync  = require('browser-sync');
@@ -44,7 +45,7 @@ gulp.task('vendorStyles', function () {
       this.emit('end');
     }}))
     .pipe(concat(config.vendor.styles.output))
-    .pipe(minifyCss())
+    .pipe(postcss([ cssnano() ]))
     .pipe(sourcemaps.write('.'))
     .pipe(gulpif(global.isProd, 
       header(config.banner.header, {pkg: pkg}) 
