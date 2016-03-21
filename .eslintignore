@@ -1,8 +1,7 @@
 # node_modules are ignored by default
 
 # Ignore build folder
-build
-gulp
+www
 node_modules
 bower_components
 tests
