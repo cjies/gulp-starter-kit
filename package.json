@@ -1,6 +1,6 @@
 {
   "name": "gulp-starter-kit",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "author": "CJies Tan <cijies@gmail.com>",
   "description": "Basic Gulp Starter Kit",
   "main": "gulpfile.js",
