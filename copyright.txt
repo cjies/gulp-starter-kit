@@ -1,0 +1,10 @@
+/*******************************************
+ * 
+ * <%= pkg.name %>, v<%= pkg.version %>
+ * <%= pkg.description %>
+ *
+ * Copyright <%= pkg.author %>
+ * Lincense: <%= pkg.license %>
+ *
+ ******************************************/
+
