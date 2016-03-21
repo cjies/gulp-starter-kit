@@ -1,15 +1,14 @@
-'use strict';
+// *************************************
+//
+//   Development Task
+//
+// *************************************
 
-var config      = require('../config');
-var gulp        = require('gulp');
-var runSequence = require('run-sequence');
+import config from '../config';
+import gulp from 'gulp';
+import runSequence from 'run-sequence';
 
-gulp.task('dev', [], function(cb) {
-
-  cb = cb || function() {};
-
-  global.isProd = false;
-
-  runSequence(config.tasks.dev, 'watch', cb);
-
+gulp.task('dev', [], (cb) => {
+    global.isProd = false;
+    runSequence(config.tasks.dev, 'watch', cb);
 });

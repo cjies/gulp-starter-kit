@@ -1,27 +1,32 @@
-'use strict';
+// *************************************
+//
+//   Handle Erros
+//
+// *************************************
 
-var gutil  = require('gulp-util');
-var notify = require('gulp-notify');
+import gutil from 'gulp-util';
+import notify from 'gulp-notify';
 
-module.exports = function(error, errorType) {
+export default function (error) {
+    if (!global.isProd) {
+        const args = Array.prototype.slice.call(arguments);
 
-  if( !global.isProd ) {
+        // Show error log
+        gutil.log(gutil.colors.grey(error.message));
 
-    gutil.beep();
-    notify.onError({
-      title: errorType + ' Error',
-      message: 'Something going wrong.',
-      sound: 'Pop'
-    })(error);
+        // Show notification
+        notify.logLevel(0);
+        notify.onError({
+            title: `[${error.relativePath}] Error`,
+            message: '<%= error.messageOriginal %>',
+            sound: 'Pop'
+        }).apply(this, args);
 
-    // Keep gulp from hanging on this task
-    // this.emit('end');
+        // Keep gulp from hanging on this task
+        this.emit('end');
+    } else {
+        console.log(error);
+        process.exit(1);
+    }
+}
 
-  } else {
-    // Log the error and stop the process
-    // to prevent broken code from building
-    console.log(error);
-    process.exit(1);
-  }
-
-};

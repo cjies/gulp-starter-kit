@@ -1,10 +1,12 @@
-'use strict';
+// *************************************
+//
+//   Test Task
+//
+// *************************************
 
-var gulp        = require('gulp');
-var runSequence = require('run-sequence');
+import gulp from 'gulp';
+import runSequence from 'run-sequence';
 
-gulp.task('test', [], function() {
-
-  return runSequence('unit');
-
+gulp.task('test', [], () => {
+    return runSequence('unit');
 });

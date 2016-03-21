@@ -1,15 +1,17 @@
-'use strict';
+// *************************************
+//
+//   Unit Task (karma)
+//
+// *************************************
 
-var config = require('../config');
-var gulp   = require('gulp');
-var Server = require('karma').Server;
+import config from '../config';
+import gulp from 'gulp';
+import { Server } from 'karma';
 
-gulp.task('unit', function (cb) {
-
-  new Server({
-    configFile: '../../../' + config.test.karma,
-    singleRun: false,
-    autoWatch: true
-  }, cb).start();
-
+gulp.task('unit', (cb) => {
+    return new Server({
+        configFile: `../../../${config.test.karma}`,
+        singleRun: false,
+        autoWatch: true
+    }, cb).start();
 });

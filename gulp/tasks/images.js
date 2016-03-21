@@ -1,27 +1,29 @@
-'use strict';
+// *************************************
+//
+//   Images Task
+//
+// *************************************
 
-var config      = require('../config');
-var changed     = require('gulp-changed');
-var gulp        = require('gulp');
-var gulpif      = require('gulp-if');
-var filter      = require('gulp-filter');
-var imagemin    = require('gulp-imagemin');
-var browserSync = require('browser-sync');
+import config from '../config';
+import changed from 'gulp-changed';
+import gulp from 'gulp';
+import gulpif from 'gulp-if';
+import filter from 'gulp-filter';
+import imagemin from 'gulp-imagemin';
+import browserSync from 'browser-sync';
 
-gulp.task('images', function() {
+gulp.task('images', () => {
+    // Filtering
+    const f = filter(config.images.filter, { restore: true });
 
-  // Filtering
-  var f = filter(config.images.filter, { restore: true })
-
-  return gulp.src(config.images.src)
-    .pipe(changed(config.images.dest)) // Ignore unchanged files
-    .pipe(f) // Filtering
-    .pipe(gulpif(global.isProd, imagemin())) // Optimize
-    .pipe(f.restore)
-    .pipe(gulp.dest(config.images.dest))
-    .pipe(gulpif(
-      global.isWatching, 
-      browserSync.stream({ once: true })
-    ));
-
+    return gulp.src(config.images.src)
+        .pipe(changed(config.images.dest)) // Ignore unchanged files
+        .pipe(f) // Filtering
+        .pipe(gulpif(global.isProd, imagemin(config.images.imagemin))) // Optimize
+        .pipe(f.restore)
+        .pipe(gulp.dest(config.images.dest))
+        .pipe(gulpif(
+            global.isWatching,
+            browserSync.stream({ once: true })
+        ));
 });

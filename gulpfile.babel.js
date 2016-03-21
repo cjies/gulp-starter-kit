@@ -1,9 +1,8 @@
 // *************************************
 //
-//   Deploy Task
+//   Advanced GulpFile
 //
 // *************************************
 
-import gulp from 'gulp';
-
-gulp.task('deploy', ['prod'], () => {});
+global.isProd = false;
+require('./gulp');

@@ -1,184 +1,197 @@
-'use strict';
+// *************************************
+//
+//   Config for gulp tasks
+//
+// *************************************
 
-const currentYear = new Date().getFullYear();
+import path from 'path';
+import fs from 'fs';
 
-module.exports = {
+export default {
 
-  // -------------------------------------
-  //   Server Port
-  // -------------------------------------
+    // -------------------------------------
+    //   Server Port
+    // -------------------------------------
 
-    browserPort  : 8888,
-    UIPort       : 8080,
-    serverPort   : 8101,
+    browserPort: 8888,
+    UIPort: 8080,
+    testPort: 8101,
 
-
-  // -------------------------------------
-  //   Stylesheets
-  // -------------------------------------
+    // -------------------------------------
+    //   Stylesheets
+    // -------------------------------------
 
     // Sass with libsass
     sass: {
-      src: ['src/**/*.+(sass|scss)'],
-      sourcemap: true,
-      autoprefixer: {
-        browsers: ['last 2 versions'],
-        cascade: false
-      },
-      cssnano: false,
-      dest: 'www/css'
+        src: ['src/**/*.+(sass|scss)'],
+        sourcemap: true,
+        opt: {
+            outputStyle: 'compact',
+            includePaths: [
+                path.join(__dirname, 'node_modules')
+            ]
+        },
+        autoprefixer: {
+            browsers: ['last 2 versions'],
+            cascade: false
+        },
+        cssnano: {
+            reduceIdents: false
+        },
+        dest: 'www/css'
     },
 
     // Less
     less: {
-      src: ['src/**/*.less'],
-      sourcemap: true,
-      autoprefixer: {
-        browsers: ['last 2 versions'],
-        cascade: false
-      },
-      cssnano: false,
-      dest: 'www/css'
+        src: ['src/**/*.less'],
+        sourcemap: true,
+        autoprefixer: {
+            browsers: ['last 2 versions'],
+            cascade: false
+        },
+        cssnano: {
+            reduceIdents: false
+        },
+        dest: 'www/css'
     },
 
     // Vanilla CSS
     css: {
-      src: ['src/**/*.css'],
-      sourcemap: true,
-      autoprefixer: false,
-      cssnano: false,
-      dest: 'www/css'
+        src: ['src/**/*.css'],
+        sourcemap: true,
+        autoprefixer: false,
+        cssnano: {
+            reduceIdents: false
+        },
+        dest: 'www/css'
     },
 
+    // -------------------------------------
+    //   Scripts
+    // -------------------------------------
 
-  // -------------------------------------
-  //   Scripts
-  // -------------------------------------
-
-    // JavaScript
     scripts: {
-      src: ['src/**/*.js'],
-      output: false,
-      dest: 'www/js'
+        src: ['src/**/*.js'],
+        output: false,
+        dest: 'www/js'
     },
 
-
-  // -------------------------------------
-  //   Templates
-  // -------------------------------------
+    // -------------------------------------
+    //   HTML
+    // -------------------------------------
 
     // HTML Templates
     html: {
-      src: ['src/**/*.html'],
-      dest: 'www/',
-      htmlmin: {
-        removeComments: true,
-        collapseWhitespace: true
-      }
+        src: ['src/**/*.html'],
+        dest: 'www/',
+        htmlmin: {
+            removeComments: true,
+            collapseWhitespace: true
+        }
     },
 
     // Jade Templates
     jade: {
-      src: ['src/**/*.jade'],
-      underscore: false,  // Render underscore file
-      locals: false,  
-      dest: 'www/'
+        src: ['src/**/*.jade'],
+        underscore: false,  // Render underscore file
+        locals: false,
+        dest: 'www/'
     },
 
 
-  // -------------------------------------
-  //   Static Sources
-  // -------------------------------------
+    // -------------------------------------
+    //   Static Sources
+    // -------------------------------------
 
     // Images
     images: {
-      src: ['static/img/**/*.+(jpg|jpeg|gif|png)'],
-      filter: [],
-      dest: 'www/img'
+        src: ['static/img/**/*.+(jpg|jpeg|gif|png)'],
+        filter: [],
+        imagemin: {},
+        dest: 'www/img'
     },
 
     // Fonts
     fonts: {
-      src: ['static/fonts/**/*.+(woff|woff2|ttf|eot|svg)'],
-      dest: 'www/fonts'
+        src: ['static/fonts/**/*.+(woff|woff2|ttf|eot|svg)'],
+        dest: 'www/fonts'
     },
 
-    // Locales JSON
-    locales: {
-      src: [],
-      dest: 'www/locales'
-    },
-
-
-  // -------------------------------------
-  //   Tests
-  // -------------------------------------
-
-    'test': {
-      'karma': 'tests/karma.config.js'
+    // JSON
+    json: {
+        src: [],
+        dest: 'www/json'
     },
 
 
-  // -------------------------------------
-  //   Utitlity
-  // -------------------------------------
+    // -------------------------------------
+    //   Test
+    // -------------------------------------
+
+    test: {
+        karma: 'tests/karma.config.js'
+    },
+
+    // -------------------------------------
+    //   Vendor
+    // -------------------------------------
+
+    vendor: {
+        scripts: {
+            src: [],
+            output: 'vendor.bundle.js',
+            dest: 'www/js'
+        },
+        styles: {
+            src: [],
+            output: 'vendor.bundle.css',
+            cssnano: {
+                reduceIdents: false
+            },
+            dest: 'www/css'
+        }
+    },
+
+    // -------------------------------------
+    //   Utils
+    // -------------------------------------
+
+    srcDir: './src/',
+    buildDir: 'www',
+
+    assetExtensions: [
+        'js',
+        'css',
+        'png',
+        'jpe?g',
+        'gif',
+        'svg',
+        'eot',
+        'otf',
+        'ttc',
+        'ttf',
+        'woff2?'
+    ],
 
     gzip: {
-      src: 'www/**/*.+(html|xml|json|css|js|js.map|css.map)',
-      options: {},
-      dest: 'www/'
-    },
-
-    dist: {
-      root: 'www',
-      index: 'www/index.html'
+        src: 'www/**/*.+(html|xml|json|css|js|js.map|css.map)',
+        options: {},
+        dest: 'www/'
     },
 
     // Banner
     banner: {
-      header: [
-                '/*******************************************',
-                ' * Copyright ' + currentYear,
-                ' *',
-                ' * <%= pkg.name %>, v<%= pkg.version %>',
-                ' * <%= pkg.description %>',
-                ' *',
-                ' * By <%= pkg.author %>',
-                ' *',
-                ' * License: <%= pkg.license %>',
-                ' *',
-                ' ******************************************/',
-                '' 
-              ].join('\n')
-    }, 
-
-
-  // -------------------------------------
-  //   Vendors
-  // -------------------------------------
- 
-    vendor: {
-      scripts: {
-        src: [],
-        output: 'vendor.bundle.js',
-        dest: 'www/js'
-      },
-      styles: {
-        src: [],
-        output: 'vendor.bundle.css',
-        dest: 'www/css',
-      }
+        header: fs.readFileSync('copyright.txt', 'utf8')
     },
 
-
-  // -------------------------------------
-  //   Tasks Runner (Dev, Prod, Watch)
-  // -------------------------------------
+    // -------------------------------------
+    //   Tasks Runner (Dev, Prod, Watch)
+    // -------------------------------------
 
     tasks: {
-      dev:   ['html', 'sass', 'scripts', 'images', 'fonts', 'vendor'],
-      prod:  ['html', 'sass', 'scripts', 'images', 'fonts', 'vendor'],
-      watch: ['html', 'sass', 'scripts', 'images', 'fonts']
+        dev: ['html', 'sass', 'scripts', 'images', 'vendor'],
+        prod: ['html', 'sass', 'scripts', 'images', 'vendor'],
+        watch: ['html', 'sass', 'scripts', 'images']
     }
 
 };

@@ -1,9 +1,23 @@
-'use strict';
+// *************************************
+//
+//   Main Entry for gulp tasks
+//
+// *************************************
 
-var fs = require('fs');
-var onlyScripts = require('./util/scriptFilter');
-var tasks = fs.readdirSync('./gulp/tasks/').filter(onlyScripts);
+import fs from 'fs';
+import gulp from 'gulp';
+import onlyScripts from './util/scriptFilter';
 
-tasks.forEach(function(task) {
-  require('./tasks/' + task);
+const tasks = fs.readdirSync('./gulp/tasks/').filter(onlyScripts);
+
+gulp.on('stop', () => {
+    if (!global.isWatching) {
+        process.nextTick(() => {
+            process.exit(0);
+        });
+    }
+});
+
+tasks.forEach((task) => {
+    require(`./tasks/${task}`);
 });

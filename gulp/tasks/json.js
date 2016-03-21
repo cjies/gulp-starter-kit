@@ -1,25 +1,22 @@
 // *************************************
 //
-//   HTML Task
+//   JSON Task
 //
 // *************************************
 
 import config from '../config';
 import gulp from 'gulp';
-import browserSync from 'browser-sync';
-import gulpif from 'gulp-if';
 import plumber from 'gulp-plumber';
-import htmlmin from 'gulp-htmlmin';
+import gulpif from 'gulp-if';
+import jsonminify from 'gulp-jsonminify';
+import browserSync from 'browser-sync';
 import handleErrors from '../util/handleErrors';
 
-gulp.task('html', () => {
-    return gulp.src(config.html.src)
+gulp.task('json', () => {
+    return gulp.src(config.json.src)
         .pipe(plumber({ errorHandler: handleErrors }))
-        .pipe(gulpif(
-            global.isProd,
-            htmlmin(config.html.htmlmin)
-        ))
-        .pipe(gulp.dest(config.html.dest))
+        .pipe(jsonminify())
+        .pipe(gulp.dest(config.json.dest))
         .pipe(gulpif(
             global.isWatching,
             browserSync.stream({ once: true })

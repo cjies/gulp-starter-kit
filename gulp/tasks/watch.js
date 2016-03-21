@@ -1,19 +1,21 @@
-'use strict';
+// *************************************
+//
+//   Devlopment Task
+//
+// *************************************
 
-var config        = require('../config');
-var gulp          = require('gulp');
-var watch         = require('gulp-watch');
+import config from '../config';
+import gulp from 'gulp';
+import watch from 'gulp-watch';
 
-gulp.task('watch', ['browserSync', 'server'], function() {
+gulp.task('watch', ['browserSync'], () => {
+    global.isWatching = true;
 
-  global.isWatching = true;
-
-  // ForEach Task
-  var watchTasks = config.tasks.watch;
-  watchTasks.forEach(function(task) {
-    watch(config[task].src, function(){
-      gulp.start( [task] );
+    // ForEach Task
+    const watchTasks = config.tasks.watch;
+    watchTasks.forEach((task) => {
+        watch(config[task].src, () => {
+            gulp.start([task]);
+        });
     });
-  });
-
 });

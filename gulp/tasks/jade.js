@@ -1,41 +1,38 @@
-'use strict';
+// *************************************
+//
+//   Jade Task
+//
+// *************************************
 
-var config       = require('../config');
-var gulp         = require('gulp');
-var gutil        = require('gulp-util');
-var plumber      = require('gulp-plumber');
-var gulpif       = require('gulp-if');
-var gdata        = require('gulp-data'); 
-var jade         = require('gulp-jade'); 
-var filter       = require('gulp-filter');
-var handleErrors = require('../util/handleErrors');
-var browserSync  = require('browser-sync');
+import config from '../config';
+import gulp from 'gulp';
+import plumber from 'gulp-plumber';
+import gulpif from 'gulp-if';
+import gdata from 'gulp-data';
+import jade from 'gulp-jade';
+import filter from 'gulp-filter';
+import handleErrors from '../util/handleErrors';
+import browserSync from 'browser-sync';
 
-gulp.task('jade', function () {
+gulp.task('jade', () => {
+    // Filtering out partials (folders and files starting with "_" )
+    const f = filter((file) => {
+        return !/\/_/.test(file.path) && !/^_/.test(file.relative);
+    }, { restore: true });
 
-  // Filtering out partials (folders and files starting with "_" )
-  var f = filter(function(file) {
-    return !/\/_/.test(file.path) && !/^_/.test(file.relative);
-  }, { restore: true });
-
-  return gulp.src(config.jade.src)
-    .pipe(plumber({errorHandler: function(error) {
-      gutil.log(gutil.colors.grey(error.message));
-      handleErrors(error, 'Jade');
-      this.emit('end');
-    }}))
-    .pipe(gulpif(
-      config.jade.locals, 
-      gdata(function(file) {
-        var data = require('../../' + config.jade.locals);
-        return data;
-      })
-    ))
-    .pipe(jade({
-      pretty: global.isProd ? '' : '  '
-    }))
-    .pipe(gulpif(!config.jade.underscore, f)) // Filtering
-    .pipe(gulp.dest(config.jade.dest))
-    .pipe(gulpif(!config.jade.underscore, f.restore))
-    .pipe(browserSync.stream({ once: true }));
+    return gulp.src(config.jade.src)
+        .pipe(plumber({ errorHandler: handleErrors }))
+        .pipe(gulpif(
+            config.jade.locals,
+            gdata(() => require(`../../${config.jade.locals}`))
+        ))
+        .pipe(jade({
+            pretty: global.isProd ? '' : '  '
+        }))
+        .pipe(gulpif(!config.jade.underscore, f)) // Filtering
+        .pipe(gulp.dest(config.jade.dest))
+        .pipe(gulpif(!config.jade.underscore, f.restore))
+        .pipe(browserSync.stream({
+            once: true
+        }));
 });
